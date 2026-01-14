@@ -1,6 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"io"
+	"log"
+	"os"
+)
 func incrementGenerator() (func() int) {
 	x := 0
 	return func() int {
@@ -22,15 +27,43 @@ func foo(params ...int) {
 	}
 }
 
-func main() {
-  f := 1.11
-	fmt.Println(f)
-	fmt.Println(int(f))
-
-	m := map[string]int{
-		"Mike": 20,
-		"Nancy": 24,
-		"Messi": 30,
+func by2(num int) string {
+	if num % 2 == 0 {
+		return "ok" 
+	} else {
+		return "no"
 	}
-	fmt.Printf("%T %v", m, m)
+}
+
+func getOsName() string{
+	return "aiueo"
+}
+
+func foo2() {
+	defer fmt.Println("world foo")
+
+	fmt.Println("hello foo")
+}
+
+func LoggingSettings(logFile string) {
+	logfile, _ := os.OpenFile(logFile, os.O_RDWR | os.O_CREATE|os.O_APPEND, 0666)
+	multiLogFile := io.MultiWriter(os.Stdout, logfile)
+	log.SetFlags(log.Ldate | log. Ltime | log.Llongfile)
+	log.SetOutput(multiLogFile)
+}
+
+
+func main() {
+	LoggingSettings("test.log")
+	_, err := os.Open("fatadaf;asf")
+	if err != nil {
+		log.Fatalln("Exit", err)
+	}
+	log.Println("logging!")
+	log.Printf("%T %v", "test", "test")
+
+	log.Fatalf("%T %v", "test", "test")
+	log.Fatalln("error!")
+
+	fmt.Println("ok!")
 }
